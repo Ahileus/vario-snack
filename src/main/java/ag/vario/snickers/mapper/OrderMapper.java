@@ -21,11 +21,11 @@ public class OrderMapper {
         }).collect(Collectors.toSet()));
 
         orderDTO.setOrderPositions(order.getOrderpositions().stream().map(orderposition -> {
-            ProductPositionDTO orderPositionDTO = new ProductPositionDTO();
-            orderPositionDTO.setId(orderposition.getId());
-            orderPositionDTO.setProductId(orderposition.getProduct().getId());
-            orderPositionDTO.setCount(orderposition.getCount());
-            return orderPositionDTO;
+            ProductPositionDTO productPositionDTO = new ProductPositionDTO();
+            productPositionDTO.setId(orderposition.getId());
+            productPositionDTO.setProductId(orderposition.getProduct().getId());
+            productPositionDTO.setCount(orderposition.getCount());
+            return productPositionDTO;
         }).collect(Collectors.toSet()));
 
         return orderDTO;

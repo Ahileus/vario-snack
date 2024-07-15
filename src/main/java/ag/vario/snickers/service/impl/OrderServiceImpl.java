@@ -20,20 +20,24 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
-    public OrderDTO getOrderById(Long id) {
-        Order order = orderRepository
-                .findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+    public OrderDTO getOrderDTOById(Long orderId) {
+        Order order = this.getOrderById(orderId);
         return OrderMapper.mapToOrderDTO(order);
     }
 
-//    public OrderDTO addOrderPosition(Long orderId, OrderPositionDTO positionDTO) {
-//        ProductPosition position = mapper.mapPositionDtoToPosition(positionDTO);
-//
-//        Optional<Order> byId = orderRepository.findById(orderId);
-//        Order order = byId.orElseThrow();
-//        order.getOrderpositions().add(position);
-//
-//        orderRepository.save(order);
-//    }
+    public OrderDTO addOrderPosition(Long orderId, OrderPositionDTO positionDTO) {
+        ProductPosition position = mapper.mapPositionDtoToPosition(positionDTO);
+
+        Order order = this.getOrderById(orderId);
+        order.getOrderpositions().add(position);
+
+        Order savedOrder = orderRepository.save(order);
+        return OrderMapper.mapToOrderDTO(savedOrder);
+    }
+
+    private Order getOrderById(Long orderId) {
+        return orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+    }
 }
