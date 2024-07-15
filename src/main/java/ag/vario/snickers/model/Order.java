@@ -1,7 +1,6 @@
 package ag.vario.snickers.model;
 
 import jakarta.persistence.*;
-import ag.vario.snickers.model.Orderposition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +20,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "order")
-    private Set<Orderposition> orderpositions;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductPosition> orderpositions;
 
-    @OneToMany(mappedBy = "order")
-    private Set<Moneyposition> moneypositions;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MoneyPosition> moneypositions;
 
 }

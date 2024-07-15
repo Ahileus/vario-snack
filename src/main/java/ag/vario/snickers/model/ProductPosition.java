@@ -12,10 +12,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "ORDERPOSITION")
-public class Orderposition {
+public class ProductPosition {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "COUNT")
@@ -25,4 +25,7 @@ public class Orderposition {
     @JoinColumn(name = "ORDER_ID")
     private Order order;
 
+    @ManyToOne
+    @JoinColumn(name = "PRODUCT_ID")
+    private Product product;
 }
