@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,9 +23,11 @@ public class Order {
     private Long id;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductPosition> productpositions = new HashSet<>();
+    private Set<ProductPosition> productpositions;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<MoneyPosition> moneypositions = new HashSet<>();
+    private Set<MoneyPosition> moneypositions;
 
+    @Column(name = "STATUS")
+    private String status;
 }

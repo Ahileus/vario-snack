@@ -2,9 +2,7 @@ package ag.vario.snickers.service.impl;
 
 import ag.vario.snickers.dto.MoneyDTO;
 import ag.vario.snickers.mapper.MoneyMapper;
-import ag.vario.snickers.mapper.ProductMapper;
 import ag.vario.snickers.model.Money;
-import ag.vario.snickers.model.Product;
 import ag.vario.snickers.repository.MoneyRepository;
 import ag.vario.snickers.service.MoneyService;
 import jakarta.transaction.Transactional;
@@ -12,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor

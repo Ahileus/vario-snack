@@ -31,21 +31,21 @@ public class OrderMapper {
         return orderDTO;
     }
 
-    public static MoneyPosition mapToMoneyPosition(MoneyPositionDTO moneyPositionDTO, Money money) {
+    public static MoneyPosition mapToMoneyPosition(MoneyPositionDTO moneyPositionDTO, Order order, Money money) {
 
         MoneyPosition moneyPosition = new MoneyPosition();
         moneyPosition.setCount(moneyPositionDTO.getCount());
         moneyPosition.setMoney(money);
-
+        moneyPosition.setOrder(order);
         return moneyPosition;
     }
 
-    public static ProductPosition mapToProductPosition(ProductPositionDTO productPositionDTO, Product product) {
+    public static ProductPosition mapToProductPosition(ProductPositionDTO productPositionDTO, Order order, Product product) {
 
         ProductPosition productPosition = new ProductPosition();
         productPosition.setCount(productPositionDTO.getCount());
         productPosition.setProduct(product);
-
+        productPosition.setOrder(order);
         return productPosition;
     }
 }

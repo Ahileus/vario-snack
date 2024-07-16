@@ -6,15 +6,14 @@ import ag.vario.snickers.dto.OrderPreisDTO;
 import ag.vario.snickers.model.MoneyPosition;
 import ag.vario.snickers.model.Order;
 import ag.vario.snickers.model.ProductPosition;
+import ag.vario.snickers.service.MoneyService;
 import ag.vario.snickers.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @RestController
@@ -23,6 +22,8 @@ import java.util.Set;
 public class OrderController {
 
     private final OrderService orderService;
+    private final MoneyService moneyService;
+
     @PostMapping
     public ResponseEntity<OrderPreisDTO> createOrder(@RequestBody OrderDTO orderDTO) {
 
@@ -33,14 +34,12 @@ public class OrderController {
             order = orderService.saveOrder(order);
         }
 
-        if (orderDTO.getMoneyPositions().size() > 0) {
-            Set<MoneyPosition> moneyPosition = orderService.getMoneyPosition(orderDTO.getMoneyPositions());
-            order.getMoneypositions().addAll(moneyPosition);
-        }
 
-        if (orderDTO.getProductPositions().size() > 0) {
-            Set<ProductPosition> productPosition = orderService.getProductPosition(orderDTO.getProductPositions());
+        Set<ProductPosition> productPosition = orderService.getProductPosition(order, orderDTO.getProductPositions());
+        if (order.getProductpositions() != null) {
             order.getProductpositions().addAll(productPosition);
+        } else {
+            order.setProductpositions(productPosition);
         }
 
         order = orderService.saveOrder(order);
@@ -48,5 +47,25 @@ public class OrderController {
         OrderPreisDTO orderPreisDTO = orderService.getPreisForOrder(order);
 
         return new ResponseEntity<>(orderPreisDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/input")
+    public ResponseEntity<OrderPreisDTO> inputMoney(@RequestBody OrderDTO orderDTO) {
+
+        Order order = orderService.getOrderById(orderDTO.getId());
+
+        Set<MoneyPosition> moneyPosition = orderService.getMoneyPosition(order, orderDTO.getMoneyPositions());
+        if (order.getMoneypositions() != null) {
+            order.getMoneypositions().addAll(moneyPosition);
+        } else {
+            order.setMoneypositions(moneyPosition);
+        }
+
+        BigDecimal preis = orderService.getPreisForOrder(order).getPreis();
+        BigDecimal money = orderService.getMoneyForOrder(order);
+
+        order = orderService.saveOrder(order);
+
+        return new ResponseEntity<>(new OrderPreisDTO(order.getId(), money.subtract(preis)), HttpStatus.OK);
     }
 }

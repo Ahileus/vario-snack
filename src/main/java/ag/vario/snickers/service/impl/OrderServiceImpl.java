@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,7 +50,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Set<ProductPosition> getProductPosition(Set<ProductPositionDTO> positionDTO) {
+    public BigDecimal getMoneyForOrder(Order order) {
+        return order.getMoneypositions()
+                .stream()
+                .map(money -> money.getMoney().getWorth().multiply(new BigDecimal(money.getCount())))
+                .reduce(BigDecimal.ZERO, (money1, money2) -> money1.add(money2));
+    }
+
+    @Override
+    public Set<ProductPosition> getProductPosition(Order order, Set<ProductPositionDTO> positionDTO) {
         return positionDTO
                 .stream()
                 .map(position ->
@@ -59,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
                             Product product = productRepository
                                     .findById(position.getProductId())
                                     .orElseThrow(() -> new RuntimeException("Product not found"));
-                            return OrderMapper.mapToProductPosition(position, product);
+                            return OrderMapper.mapToProductPosition(position, order, product);
                         }
                 )
                 .collect(Collectors.toSet()) ;
@@ -67,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Set<MoneyPosition> getMoneyPosition(Set<MoneyPositionDTO> positionDTO) {
+    public Set<MoneyPosition> getMoneyPosition(Order order, Set<MoneyPositionDTO> positionDTO) {
 
         return positionDTO
                 .stream()
@@ -76,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
                             Money money = moneyRepository
                                     .findById(position.getMoneyId())
                                     .orElseThrow(() -> new RuntimeException("Money not found"));
-                            return OrderMapper.mapToMoneyPosition(position, money);
+                            return OrderMapper.mapToMoneyPosition(position, order, money);
                         }
                 )
                 .collect(Collectors.toSet()) ;
