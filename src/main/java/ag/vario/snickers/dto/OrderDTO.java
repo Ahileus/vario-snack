@@ -13,6 +13,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class OrderDTO {
     private Long id;
-    private Set<ProductPositionDTO> orderPositions;
+    private Set<ProductPositionDTO> productPositions;
     private Set<MoneyPositionDTO> moneyPositions;
 }

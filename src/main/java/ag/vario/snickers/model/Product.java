@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,5 +27,8 @@ public class Product {
 
     @Column(name = "COUNT")
     private Long count;
+
+    @OneToMany(mappedBy = "product")
+    private Set<ProductPosition> productpositions;
 
 }

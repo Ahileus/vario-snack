@@ -3,7 +3,7 @@ package ag.vario.snickers.mapper;
 import ag.vario.snickers.dto.MoneyPositionDTO;
 import ag.vario.snickers.dto.OrderDTO;
 import ag.vario.snickers.dto.ProductPositionDTO;
-import ag.vario.snickers.model.Order;
+import ag.vario.snickers.model.*;
 
 import java.util.stream.Collectors;
 
@@ -20,7 +20,7 @@ public class OrderMapper {
             return moneyPositionDTO;
         }).collect(Collectors.toSet()));
 
-        orderDTO.setOrderPositions(order.getOrderpositions().stream().map(orderposition -> {
+        orderDTO.setProductPositions(order.getProductpositions().stream().map(orderposition -> {
             ProductPositionDTO productPositionDTO = new ProductPositionDTO();
             productPositionDTO.setId(orderposition.getId());
             productPositionDTO.setProductId(orderposition.getProduct().getId());
@@ -29,5 +29,23 @@ public class OrderMapper {
         }).collect(Collectors.toSet()));
 
         return orderDTO;
+    }
+
+    public static MoneyPosition mapToMoneyPosition(MoneyPositionDTO moneyPositionDTO, Money money) {
+
+        MoneyPosition moneyPosition = new MoneyPosition();
+        moneyPosition.setCount(moneyPositionDTO.getCount());
+        moneyPosition.setMoney(money);
+
+        return moneyPosition;
+    }
+
+    public static ProductPosition mapToProductPosition(ProductPositionDTO productPositionDTO, Product product) {
+
+        ProductPosition productPosition = new ProductPosition();
+        productPosition.setCount(productPositionDTO.getCount());
+        productPosition.setProduct(product);
+
+        return productPosition;
     }
 }
