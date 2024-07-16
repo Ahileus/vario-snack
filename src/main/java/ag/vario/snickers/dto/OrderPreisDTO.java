@@ -11,9 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDTO {
-    private Long id;
-    private String name;
-    private Long count;
+public class OrderPreisDTO {
+    private Long orderId;
     private BigDecimal preis;
 }

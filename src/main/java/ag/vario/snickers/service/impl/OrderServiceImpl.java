@@ -2,6 +2,7 @@ package ag.vario.snickers.service.impl;
 
 import ag.vario.snickers.dto.MoneyPositionDTO;
 import ag.vario.snickers.dto.OrderDTO;
+import ag.vario.snickers.dto.OrderPreisDTO;
 import ag.vario.snickers.dto.ProductPositionDTO;
 import ag.vario.snickers.mapper.OrderMapper;
 import ag.vario.snickers.model.*;
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,18 +39,16 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-//    public OrderDTO addOrderPosition(Long orderId, ProductPositionDTO positionDTO) {
-//        Order order = this.getOrderById(orderId);
-//        Product product = productRepository
-//                .findById(positionDTO.getProductId())
-//                .orElseThrow(() -> new RuntimeException("Product not found"));
-//        ProductPosition position = OrderMapper.mapToProductPosition(positionDTO, order, product);
-//
-//        order.getProductpositions().add(position);
-//
-//        Order savedOrder = orderRepository.save(order);
-//        return OrderMapper.mapToOrderDTO(savedOrder);
-//    }
+    @Override
+    public OrderPreisDTO getPreisForOrder(Order order) {
+
+        BigDecimal preis = order.getProductpositions()
+                .stream()
+                .map(product -> product.getProduct().getPreis().multiply(new BigDecimal(product.getCount())))
+                .reduce(BigDecimal.ZERO, (product1, product2) -> product1.add(product2));
+
+        return new OrderPreisDTO(order.getId(), preis);
+    }
 
     @Override
     public Set<ProductPosition> getProductPosition(Set<ProductPositionDTO> positionDTO) {
@@ -89,4 +89,6 @@ public class OrderServiceImpl implements OrderService {
                 .findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
+
+
 }

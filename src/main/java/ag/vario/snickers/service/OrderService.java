@@ -2,6 +2,7 @@ package ag.vario.snickers.service;
 
 import ag.vario.snickers.dto.MoneyPositionDTO;
 import ag.vario.snickers.dto.OrderDTO;
+import ag.vario.snickers.dto.OrderPreisDTO;
 import ag.vario.snickers.dto.ProductPositionDTO;
 import ag.vario.snickers.model.MoneyPosition;
 import ag.vario.snickers.model.Order;
@@ -15,5 +16,6 @@ public interface OrderService {
     Set<ProductPosition> getProductPosition(Set<ProductPositionDTO> positionDTO);
     Set<MoneyPosition> getMoneyPosition(Set<MoneyPositionDTO> positionDTO);
     Order saveOrder(Order order);
+    OrderPreisDTO getPreisForOrder(Order order);
 
 }

@@ -2,6 +2,7 @@ package ag.vario.snickers.controller;
 
 import ag.vario.snickers.dto.MoneyDTO;
 import ag.vario.snickers.dto.OrderDTO;
+import ag.vario.snickers.dto.OrderPreisDTO;
 import ag.vario.snickers.model.MoneyPosition;
 import ag.vario.snickers.model.Order;
 import ag.vario.snickers.model.ProductPosition;
@@ -23,7 +24,7 @@ public class OrderController {
 
     private final OrderService orderService;
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderPreisDTO> createOrder(@RequestBody OrderDTO orderDTO) {
 
         Order order = new Order();
         if (orderDTO != null && orderDTO.getId() != null) {
@@ -44,6 +45,8 @@ public class OrderController {
 
         order = orderService.saveOrder(order);
 
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        OrderPreisDTO orderPreisDTO = orderService.getPreisForOrder(order);
+
+        return new ResponseEntity<>(orderPreisDTO, HttpStatus.OK);
     }
 }

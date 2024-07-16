@@ -10,6 +10,7 @@ public class ProductMapper {
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());
         productDTO.setCount(product.getCount());
+        productDTO.setPreis(product.getPreis());
         return productDTO;
     }
 
@@ -18,12 +19,14 @@ public class ProductMapper {
         //product.setId(productDTO.getId());
         product.setName(productDTO.getName());
         product.setCount(productDTO.getCount());
+        product.setPreis(productDTO.getPreis());
         return product;
     }
 
     public static Product merge(ProductDTO source, Product target) {
         target.setName(source.getName());
         target.setCount(source.getCount());
+        target.setPreis(source.getPreis());
         return target;
     }
 }
